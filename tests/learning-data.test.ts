@@ -40,16 +40,17 @@ describe("Madrasti AI learning data", () => {
   });
 
   it("provides an interactive exam for every grade and question type", () => {
-    for (const grade of grades) expect(examForGrade(grade.id)).toHaveLength(3);
+    for (const grade of grades) expect(examForGrade(grade.id).length).toBeGreaterThanOrEqual(5);
     expect(examQuestions.some((question) => question.type === "single")).toBe(true);
     expect(examQuestions.some((question) => question.type === "true-false")).toBe(true);
     expect(examQuestions.some((question) => question.type === "short")).toBe(true);
     expect(examQuestions.every((question) => question.correctAnswer && question.explanation && question.points > 0)).toBe(true);
   });
 
-  it("provides a teachable module for every original 3AC topic", () => {
+  it("provides a teachable module for every curriculum lesson", () => {
     const moduleIds = new Set(studyModules.map((module) => module.lessonId));
     expect(curriculum3ac.every((lesson) => moduleIds.has(lesson.id))).toBe(true);
+    expect(Object.values(gradeCurriculum).flat().every((lesson) => moduleIds.has(lesson.id))).toBe(true);
   });
 
   it("offers grade-specific revision books and authorized slots", () => {
